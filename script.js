@@ -44,7 +44,7 @@
        method: 'POST',
        body: formData
      })
-     .then(response => console.log("Audio submitted..."))
+     .then(() => console.log("Audio submitted..."))
      .catch(error => console.log("Error:", error));
    }
 
@@ -52,7 +52,7 @@
 
  // Perform the fetch request on page load
 window.onload = function() {
-  fetch('http://localhost:5500/fetch-voices')
+  fetch('http://localhost:3000/fetch-voices')
   .then(response => response.json())
   .then(data => {
     voicesData=data;
@@ -94,7 +94,7 @@ function makeAPICall() {
     }
   };
 
-  fetch(`http://localhost:5500/text-to-speech/${voiceId}`, {
+  fetch(`http://localhost:4001/text-to-speech/${voiceId}`, {
     method: 'POST',
     headers: {
       'Accept': 'audio/mpeg',
@@ -113,5 +113,39 @@ function makeAPICall() {
     audioPlayer.play();
   })
   .catch(error => console.error(error));
+}
+
+
+async function getAudio() {
+  try {
+    const textToSpeechData = {
+      text: "Text to convert to speech",
+      model_id: "eleven_monolingual_v1",
+      voice_settings: {
+          stability: 0,
+          similarity_boost: 0,
+          style: 0.5,
+          use_speaker_boost: false
+      }
+  };
+  
+
+      let res = await fetch(`http://localhost:4001/text-to-speech/21m00Tcm4TlvDq8ikWAM`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json',
+          'xi-api-key': 'fd874048e4a4111ab753bd457f0ffa75' },
+          body: JSON.stringify(textToSpeechData)
+      });
+
+      let data = await res.json();
+      let audio = document.getElementById('audioPlayer');
+      let source = document.getElementById('audioSource');
+
+      source.src = `data:audio/mpeg;base64,${data.audio}`;
+      audio.load();  // This will load the new source
+
+  } catch (error) {
+      console.error('Error:', error);
+  }
 }
 
