@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Audio Recorder</title>
+    <style>
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 20px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: #4caf50;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 9px #999;
+      }
+      .button:hover {
+        background-color: #3e8e41;
+      }
+      .button:active {
+        background-color: #3e8e41;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+      }
+      .center-line {
+        width: 1px;
+        height: auto;
+        background-color: black;
+        margin: 0 20px;
+      }
+      .container {
+        display: flex;
+        justify-content: flex-start;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Realtime Audio Recorder</h1>
+    <div>
+    <div class="container">
+      <div>
+        <button id="record" class="button">Record</button>
+        <button id="stop" class="button">Stop</button>
+        <br />
+        <br />
+        <br />
+        <audio id="audioPlayer" controls></audio>
+      </div>
+      
+      <div class="center-line"></div>
+      
+      <div>
+        <input type="file" id="audioFile" accept="audio/*" />
+        <br />
+      </div>
+    </div>
+    <br />
+    <br />
+
+    <button id="submitAudio" class="button">Submit Audio</button>
+    </div>
+    <br />
+
+    <h1>Text Input</h1>
+
+    <textarea id="textInput" rows="4" cols="50"></textarea>
+    <br />
+    <h1>Voices</h1>
+    <select id="voicesDropdown" ></select>
+
+    <br>
+    <br>
+    <button id="submitText" class="button">Submit Text</button>
+  </body>
+  <script src="script.js"></script>
+</html>
