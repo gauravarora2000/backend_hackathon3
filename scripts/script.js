@@ -1,4 +1,4 @@
-const SERVER = "http://localhost:4001";
+const SERVER = "https://d3-7n2m.onrender.com";
 let chunks = [];
 
 //jQuery time
@@ -226,7 +226,7 @@ $("#generate_voice").click(function () {
 });
 
 const fetchModels=()=> {
-  fetch('http://localhost:4001/api/models', {
+  fetch(SERVER+'/api/models', {
     method: 'GET',
     headers: {
       'authority': 'api.elevenlabs.io',
