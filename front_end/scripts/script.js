@@ -1,4 +1,4 @@
-const SERVER = "http://localhost:3000";
+const SERVER = "http://localhost:4001";
 let chunks = [];
 
 //jQuery time
@@ -98,13 +98,13 @@ $('#voice_files').change(function (e) {
 $("#create_voice_template").click(function() {
   let blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
   let formData = new FormData();
-  formData.append('audio', blob);
 
   let fileInput = document.getElementById("voice_files");
   if(fileInput.files.length > 0) {
-    formData.append('audioFile', fileInput.files[0]);
+    formData.append('files', fileInput.files[0]);
   }
-  formData.append('templateName', $("[name=template_name]").val());
+  formData.append('name', document.querySelector("[name=template_name]").value);
+  formData.append('description', document.querySelector("[name=template_name]").value);
 
   fetch(SERVER + '/addVoice', {
     method: 'POST',
