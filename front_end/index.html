@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to speech</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+</head>
+<body>
+    <!-- multistep form -->
+<form id="msform">
+    <!-- progressbar -->
+    <ul id="progressbar">
+      <li class="active">Create Voice Template</li>
+      <li>Add Text Phrases</li>
+      <li>Generate Voice</li>
+    </ul>
+    <!-- fieldsets -->
+    <fieldset>
+      <h2 class="fs-title">Create Voice Template</h2>
+      <!-- <h3 class="fs-subtitle">This is step 1</h3> -->
+      <label class="fs-label">Template Name</label>
+      <input type="text" name="template_name" placeholder="Template Name" />
+      <label class="fs-label">Add Voice Files</label>
+      <label for="voice_files" class="custom-file-input"></label>
+      <input id="voice_files" type="file" name="voice_files"  multiple />
+      <span id="voice_file_name"></span>
+      <input id="create_voice_template" type="button" name="next" class="next action-button" value="Next" />
+    </fieldset>
+    <fieldset>
+      <h2 class="fs-title">Add Text Phrases</h2>
+      <!-- <h3 class="fs-subtitle">Your presence on the social network</h3> -->
+      <label class="fs-label">Text Phrases</label>
+      <textarea name="text_phrase" placeholder="Address">Add Text To Generate Voice</textarea>
+      <label class="fs-label">Choose A Template</label>
+      <select id="voice_template" name="voice_template">
+      </select>
+      <label class="fs-label">Choose A Mood</label>
+      <select name="voice_mood">
+        <option value="happy">Happy</option>
+        <option value="sad">Sad</option>
+      </select>
+      <label class="fs-label">Choose A Language</label>
+      <select name="language">
+        <option value="english">English</option>
+        <option value="hindi">Hindi</option>
+      </select>
+      <input type="button" name="previous" class="previous action-button" value="Previous" />
+      <input  id="generate_voice" type="button" name="next" class="next action-button" value="Next" />
+    </fieldset>
+    <fieldset>
+      <h2 class="fs-title">Generate Voice</h2>
+      <!-- <h3 class="fs-subtitle">We will never sell it</h3> -->
+      <img class="audio-img" src="./images/audio-image.jpeg">
+      <audio id="audio-file" controls>
+        <!-- <source id="audio-file-source" src="./sounds/ENG_F.wav" type="audio/wav"> -->
+      Your browser does not support the audio element.
+      </audio>
+
+      <a href="./ENG_F.wav" class="submit action-button" target="_top" download>Download</a>
+    </fieldset>
+  </form>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+  <script type="text/javascript" src="./scripts/script.js"></script>
+  
+</body>
+</html>
