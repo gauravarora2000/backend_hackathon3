@@ -25,7 +25,7 @@ app.get('/fetch-voices', async (req, res) => {
       const response = await axios.get('https://api.elevenlabs.io/v1/voices', {
         headers: {
           'Accept': 'application/json',
-          'xi-api-key': '0aa0dd7a5776e591c74e58be393f6b21'  // replace with your actual API key
+          'xi-api-key': req.headers['xi-api-key']
         }
       });
       res.json(response.data);
@@ -74,7 +74,7 @@ app.post('/conversation', async (req, res) => {
       const response = await axios.get('https://api.elevenlabs.io/v1/voices', {
             headers: {
               'Accept': 'application/json',
-              'xi-api-key': '0aa0dd7a5776e591c74e58be393f6b21'  // replace with your actual API key
+              'xi-api-key': req.headers['xi-api-key']
             }
           });
       let voices = response.data.voices
@@ -87,7 +87,7 @@ app.post('/conversation', async (req, res) => {
             const response = await axios.post(`https://api.elevenlabs.io/v1/text-to-speech/${voices[j].voice_id}?optimize_streaming_latency=0`, data, {
                 headers: {
                     'accept': 'audio/mpeg',
-                    'xi-api-key': '0aa0dd7a5776e591c74e58be393f6b21',
+                    'xi-api-key': req.headers['xi-api-key'],
                     'Content-Type': 'application/json'
                 },
                 responseType: 'arraybuffer'  // this will ensure the data is in correct format
@@ -137,7 +137,7 @@ app.post('/addVoice',upload.single('files'), async (req, res, next) => {
   const response = await axios.post('https://api.elevenlabs.io/v1/voices/add', formdata, {
     headers: {
       ...formdata.getHeaders(), // this is the important part
-      'xi-api-key': 'fd874048e4a4111ab753bd457f0ffa75'
+      'xi-api-key': req.headers['xi-api-key']
     },
   });
     res.json(response.data);
@@ -146,6 +146,27 @@ app.post('/addVoice',upload.single('files'), async (req, res, next) => {
     res.status(500).json({ error: 'An error occurred' });
   }
 });
+
+
+
+app.get('/api/models', (req, res) => {
+  axios({
+    method: 'get',
+    url: 'https://api.elevenlabs.io/v1/models',
+    headers: {
+      accept: 'application/json',
+      'xi-api-key': req.headers['xi-api-key']
+    }
+  })
+    .then(response => {
+      res.json(response.data);
+    })
+    .catch(error => {
+      res.json({ error: error.message });
+    });
+});
+
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });

@@ -19,6 +19,8 @@
     <fieldset>
       <h2 class="fs-title">Create Voice Template</h2>
       <!-- <h3 class="fs-subtitle">This is step 1</h3> -->
+      <label class="fs-label">Auth Key</label>
+      <input type="text" name="auth_key" placeholder="auth key" />
       <label class="fs-label">Template Name</label>
       <input type="text" name="template_name" placeholder="Template Name" />
       <label class="fs-label">Add Voice Files</label>
@@ -35,10 +37,8 @@
       <label class="fs-label">Choose A Template</label>
       <select id="voice_template" name="voice_template">
       </select>
-      <label class="fs-label">Choose A Mood</label>
-      <select name="voice_mood">
-        <option value="happy">Happy</option>
-        <option value="sad">Sad</option>
+      <label class="fs-label">Choose A Model</label>
+      <select id="models_list" name="models">
       </select>
       <label class="fs-label">Choose A Language</label>
       <select name="language">

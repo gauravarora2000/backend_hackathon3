@@ -5,6 +5,8 @@ let chunks = [];
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
+var api_key = "";
+
 
 function showLoader() {
   $(".loader").addClass("active");
@@ -123,6 +125,10 @@ $("#voice_files").change(function (e) {
 
 // Submit the audio files to generate and train voice templates
 $("#create_voice_template").click(function () {
+
+  
+  api_key = document.querySelector('input[name="auth_key"]').value;
+  fetchModels();
   let blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
   let formData = new FormData();
 
@@ -139,6 +145,9 @@ $("#create_voice_template").click(function () {
   fetch(SERVER + "/addVoice", {
     method: "POST",
     body: formData,
+    headers:{
+      'xi-api-key': api_key
+    }
   })
     .then((response) => {
       console.log("Audio submitted...", response);
@@ -147,7 +156,11 @@ $("#create_voice_template").click(function () {
     .then((voiceData) => {
       sessionStorage.setItem("voiceId", voiceData.voice_id);
       nextClick($(this));
-      fetch(SERVER + "/fetch-voices")
+      fetch(SERVER + "/fetch-voices", {
+        headers:{
+          'xi-api-key': api_key
+        }
+      })
         .then((response) => response.json())
         .then((data) => {
           voicesData = data;
@@ -193,7 +206,7 @@ $("#generate_voice").click(function () {
     method: "POST",
     headers: {
       Accept: "audio/mpeg",
-      "xi-api-key": "0aa0dd7a5776e591c74e58be393f6b21",
+      "xi-api-key": api_key,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
@@ -211,3 +224,40 @@ $("#generate_voice").click(function () {
     .finally(() => {
       hideLoader()});
 });
+
+const fetchModels=()=> {
+  fetch('http://localhost:4001/api/models', {
+    method: 'GET',
+    headers: {
+      'authority': 'api.elevenlabs.io',
+      'accept': 'application/json',
+      'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,fr;q=0.7',
+      'referer': 'https://api.elevenlabs.io/docs',
+      'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
+      'sec-ch-ua-mobile': '?0',
+      'sec-ch-ua-platform': '"macOS"',
+      'sec-fetch-dest': 'empty',
+      'sec-fetch-mode': 'cors',
+      'sec-fetch-site': 'same-origin',
+      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+      'xi-api-key': api_key
+    }
+  })
+  .then(response => response.json())
+  .then(data =>{
+    let modelsData = data;
+    const modelsDropDown = document.getElementById("models_list");
+
+          data.forEach((model) => {
+
+            const option = document.createElement("option");
+
+            option.text = model.name;
+            option.value = model.model_id;
+            modelsDropDown.add(option);
+          
+  }  )
+  
+}
+)}
+
