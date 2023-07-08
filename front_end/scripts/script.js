@@ -6,6 +6,13 @@ var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
+function showLoader() {
+  $(".loader").addClass("active");
+}
+function hideLoader() {
+  $(".loader").removeClass("active");
+}
+
 // $(".next").click(function(){
 function nextClick(button) {
   if (animating) return false;
@@ -128,7 +135,7 @@ $("#create_voice_template").click(function () {
     "description",
     document.querySelector("[name=template_name]").value
   );
-
+  showLoader()
   fetch(SERVER + "/addVoice", {
     method: "POST",
     body: formData,
@@ -164,7 +171,9 @@ $("#create_voice_template").click(function () {
           });
         });
     })
-    .catch((error) => console.log("Error:", error));
+    .catch((error) => console.log("Error:", error))
+    .finally(() => {
+      hideLoader()});
 });
 
 $("#generate_voice").click(function () {
@@ -179,7 +188,7 @@ $("#generate_voice").click(function () {
       use_speaker_boost: false,
     },
   };
-
+  showLoader();
   fetch(SERVER+`/text-to-speech/${voiceId}`, {
     method: "POST",
     headers: {
@@ -198,5 +207,7 @@ $("#generate_voice").click(function () {
       $("#download_voice").attr("href", audioSrc)
       nextClick($(this));
     })
-    .catch((error) => console.error(error));
+    .catch((error) => console.error(error))
+    .finally(() => {
+      hideLoader()});
 });

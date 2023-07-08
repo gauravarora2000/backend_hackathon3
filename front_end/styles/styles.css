@@ -203,3 +203,30 @@ audio {
     top: 66%;
     transform: translate(-50%, -50%);
 }
+
+.loader {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000a3;
+}
+.loader img{
+  margin: auto;
+  width: 100px;
+  animation: rotate 1s linear infinite;
+  margin-top: 300px;
+}
+.loader.active {
+  display: flex;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
