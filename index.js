@@ -52,41 +52,47 @@ app.get('/fetch-voices', async (req, res) => {
   
 
 // Multer configuration for handling file uploads
-const upload = multer();
-
-app.post('/addVoice', async (req, res) => {
-  const formData = new FormData();
-
-  // append fields to the formData
-  formData.append('name', 'test');
-  formData.append('description', 'test123');
-  formData.append('labels', '');
-
-  // append the file to formData
-  const fileStream = fs.createReadStream('AudioSamples/4.mp3');
-  formData.append('files', fileStream);
-
-  try {
-      const response = await axios({
-          method: 'post',
-          url: 'https://api.elevenlabs.io/v1/voices/add',
-          data: formData,
-          headers: { 
-              ...formData.getHeaders(),
-              'accept': 'application/json',
-              'xi-api-key': '0aa0dd7a5776e591c74e58be393f6b21' 
-          },
-      });
-
-      // Send response data back to the client
-      res.json(response.data);
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'An error occurred' });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, '/tmp');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
   }
 });
 
-  
+const upload = multer({ storage });
+
+app.post('/addVoice', upload.array('files', 50), async (req, res) => {
+  try {
+    const form = new FormData();
+
+    // Append fields to the form
+    form.append('name', req.body.name);
+    form.append('description', req.body.description);
+    form.append('labels', req.body.labels);
+
+    // Append the files to form-data
+    for (const file of req.files) {
+      form.append('files', fs.createReadStream(file.path), file.originalname);
+    }
+
+    const response = await axios.post('https://api.elevenlabs.io/v1/voices/add', form, {
+      headers: {
+        ...form.getHeaders(),
+        'accept': 'application/json',
+        'xi-api-key': '0aa0dd7a5776e591c74e58be393f6b21'
+      },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
